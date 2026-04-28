@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Kanit:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Roboto", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Kanit", sans-serif;
+
+  --color-ais-lime: #bcd043;
+  --color-ais-deep: #8bb31d;
+  --color-ais-pink: #fc004a;
+  --color-dark-charcoal: #272c2f;
+  --color-deep-dark: #131313;
+  --color-navbar-bg: rgba(9, 9, 9, 0.8);
+
+  --radius-card: 8px;
+  --radius-pill: 32px;
+}
+
+@layer base {
+  body {
+    @apply bg-dark-charcoal text-white font-sans antialiased;
+  }
+
+  h1, h2, h3, .font-display {
+    @apply font-display;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+
