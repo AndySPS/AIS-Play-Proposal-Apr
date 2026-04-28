@@ -9,6 +9,7 @@ import CinematicBackground from '../components/CinematicBackground';
 interface SubscriptionProps {
   onClose: () => void;
   focus?: 'disney';
+  onSubscribe?: (plan: Plan) => void;
 }
 
 export interface Plan {
@@ -83,7 +84,7 @@ export const PLANS: Plan[] = [
   }
 ];
 
-export function PricingCard({ plan }: { plan: Plan }) {
+export function PricingCard({ plan, onSubscribe }: { plan: Plan; onSubscribe?: (plan: Plan) => void }) {
   const isUltimate = plan.id === 'ultimate';
   
   return (
@@ -163,6 +164,7 @@ export function PricingCard({ plan }: { plan: Plan }) {
 
         <Button
           variant="primary"
+          onClick={() => onSubscribe?.(plan)}
           className={`w-full h-12 font-black text-[16px] transition-all ${
             isUltimate
               ? 'bg-ais-lime text-black hover:bg-ais-lime/80 shadow-[0_4px_20px_rgba(188,208,67,0.4)] hover:shadow-none'
@@ -379,7 +381,7 @@ export const OTHER_PLANS: Plan[] = [
   },
 ];
 
-export default function Subscription({ onClose, focus }: SubscriptionProps) {
+export default function Subscription({ onClose, focus, onSubscribe }: SubscriptionProps) {
   const [activeTab, setActiveTab] = useState<'ais' | 'disney' | 'sports' | 'other'>(focus === 'disney' ? 'disney' : 'ais');
   const isDisney = activeTab === 'disney';
   const isSports = activeTab === 'sports';
@@ -513,7 +515,7 @@ export default function Subscription({ onClose, focus }: SubscriptionProps) {
                   transition={{ delay: 0.2 + (i * 0.1) }}
                   className="flex-shrink-0"
                 >
-                  <PricingCard plan={plan} />
+                  <PricingCard plan={plan} onSubscribe={onSubscribe} />
                 </motion.div>
               ))}
             </div>
@@ -528,7 +530,7 @@ export default function Subscription({ onClose, focus }: SubscriptionProps) {
                 transition={{ delay: 0.2 + (i * 0.1) }}
                 className="flex w-full justify-center"
               >
-                <PricingCard plan={plan} />
+                <PricingCard plan={plan} onSubscribe={onSubscribe} />
               </motion.div>
             ))}
           </div>

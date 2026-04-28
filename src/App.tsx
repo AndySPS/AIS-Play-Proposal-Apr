@@ -21,14 +21,26 @@ import ProfileOverlay from './components/ProfileOverlay';
 import { Button } from './components/ui/Button';
 import { AIS_LOGO_URL } from './constants';
 import Login from './pages/Login';
+import PaymentModal from './pages/PaymentModal';
+import type { Plan } from './pages/Subscription';
 
 export default function App() {
   const [view, setView] = useState<'login' | 'home' | 'detail' | 'live-tv'>('login');
   const [showSubscription, setShowSubscription] = useState(false);
   const [subscriptionFocus, setSubscriptionFocus] = useState<'disney' | undefined>(undefined);
+  const [showPayment, setShowPayment] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
   const [showSearch, setShowSearch] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [isGuest, setIsGuest] = useState(true);
+
+  const handleSubscribePlan = (plan: Plan) => {
+    setSelectedPlan(plan);
+    setShowSubscription(false);
+    setIsGuest(false);
+    setView('home');
+    setShowPayment(true);
+  };
 
   const handleLoginComplete = (guestMode: boolean) => {
     setIsGuest(guestMode);
@@ -143,7 +155,7 @@ export default function App() {
   };
 
   if (view === 'login') {
-    return <Login onComplete={handleLoginComplete} />;
+    return <Login onComplete={handleLoginComplete} onSubscribe={handleSubscribePlan} />;
   }
 
   if (showDesignSystem) {
@@ -157,7 +169,18 @@ export default function App() {
     >
       <AnimatePresence>
         {showSubscription && (
-          <Subscription onClose={() => { setShowSubscription(false); setSubscriptionFocus(undefined); }} focus={subscriptionFocus} />
+          <Subscription
+            onClose={() => { setShowSubscription(false); setSubscriptionFocus(undefined); }}
+            focus={subscriptionFocus}
+            onSubscribe={handleSubscribePlan}
+          />
+        )}
+        {showPayment && selectedPlan && (
+          <PaymentModal
+            plan={selectedPlan}
+            onBack={() => { setShowPayment(false); setShowSubscription(true); }}
+            onConfirm={() => { setShowPayment(false); setView('home'); }}
+          />
         )}
         {showSearch && (
           <Search 

@@ -4,11 +4,12 @@ import { ChevronRight, Phone, ShieldCheck, User, Check, ArrowRight } from 'lucid
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { AIS_LOGO_URL } from '../constants';
-import { PricingCard, PLANS } from './Subscription';
+import { PricingCard, PLANS, type Plan } from './Subscription';
 import CinematicBackground from '../components/CinematicBackground';
 
 interface LoginProps {
   onComplete: (isGuest: boolean) => void;
+  onSubscribe?: (plan: Plan) => void;
 }
 
 type LoginStep = 'splash' | 'phone' | 'otp' | 'profile' | 'onboarding';
@@ -22,7 +23,7 @@ const PROFILE_AVATARS = [
   'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop',
 ];
 
-export default function Login({ onComplete }: LoginProps) {
+export default function Login({ onComplete, onSubscribe }: LoginProps) {
   const [step, setStep] = useState<LoginStep>('splash');
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
@@ -72,41 +73,41 @@ export default function Login({ onComplete }: LoginProps) {
               initial="enter"
               animate="center"
               exit="exit"
-              className="flex flex-col items-center text-center space-y-12"
+              className="flex flex-col items-center text-center space-y-12 lg:space-y-20"
             >
-              <div className="space-y-6">
-                <motion.img 
+              <div className="space-y-6 lg:space-y-10">
+                <motion.img
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.8, ease: "easeOut" }}
-                  src={AIS_LOGO_URL} 
-                  className="h-16 w-auto mx-auto brightness-125" 
-                  alt="AIS Play" 
+                  src={AIS_LOGO_URL}
+                  className="h-16 lg:h-24 xl:h-28 w-auto mx-auto brightness-125"
+                  alt="AIS Play"
                 />
-                <h1 className="text-4xl md:text-5xl font-black tracking-tight leading-tight">
+                <h1 className="text-5xl md:text-6xl lg:text-8xl xl:text-[108px] font-black tracking-tight leading-[0.9]">
                   ENTERTAINMENT <br />
                   <span className="text-ais-lime">UNLIMITED.</span>
                 </h1>
-                <p className="text-lg text-white/40 font-light max-w-md mx-auto leading-relaxed">
+                <p className="text-lg lg:text-2xl xl:text-3xl text-white/40 font-light max-w-md lg:max-w-2xl xl:max-w-3xl mx-auto leading-relaxed">
                   Experience the best movies, TV shows, and live sports on Thailand's #1 streaming platform.
                 </p>
               </div>
 
-              <div className="w-full max-w-xs space-y-4">
-                <Button 
+              <div className="w-full max-w-xs lg:max-w-sm xl:max-w-md space-y-4 lg:space-y-5">
+                <Button
                   variant="pill"
                   size="xl"
                   onClick={() => setStep('onboarding')}
-                  className="w-full h-14 text-base font-bold group"
+                  className="w-full h-14 lg:h-16 xl:h-18 text-base lg:text-lg xl:text-xl font-bold group"
                 >
                   Get Started
                   <ChevronRight className="ml-2 group-hover:translate-x-1 transition-transform" />
                 </Button>
-                <Button 
+                <Button
                   variant="pill"
                   size="xl"
                   onClick={() => setStep('phone')}
-                  className="w-full h-14 text-base font-bold bg-white/5 border-white/10 hover:bg-white/10 text-white"
+                  className="w-full h-14 lg:h-16 xl:h-18 text-base lg:text-lg xl:text-xl font-bold bg-white/5 border-white/10 hover:bg-white/10 text-white"
                 >
                   Login
                 </Button>
@@ -294,7 +295,7 @@ export default function Login({ onComplete }: LoginProps) {
               <div className="flex flex-col lg:flex-row gap-8 max-w-6xl mx-auto overflow-x-auto pt-16 pb-16 scrollbar-hide">
                 {PLANS.map((plan) => (
                   <div key={plan.id} className="flex-1 min-w-[300px]">
-                    <PricingCard plan={plan} />
+                    <PricingCard plan={plan} onSubscribe={onSubscribe} />
                   </div>
                 ))}
               </div>
